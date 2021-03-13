@@ -1,4 +1,4 @@
-import { MissingParamError } from '../error'
+import { MissingParamError } from '../../error'
 
 export class CreateOrderController {
   handle (httpRequest: any): any {

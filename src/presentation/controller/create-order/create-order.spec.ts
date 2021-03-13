@@ -1,5 +1,5 @@
 import { CreateOrderController } from './create-order'
-import { MissingParamError } from '../error'
+import { MissingParamError } from '../../error'
 
 const makeSut = (): CreateOrderController => {
   return new CreateOrderController()
