@@ -6,12 +6,12 @@ const makeSut = (): CreateOrderController => {
 }
 
 describe('Create Order Controller', () => {
-  test('Should return 400 if no products are provided', () => {
+  test('Should return 400 if no products are provided', async () => {
     const sut = makeSut()
     const httpRequest = {
       body: {}
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('products'))
   })
