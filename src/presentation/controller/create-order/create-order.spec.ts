@@ -1,9 +1,13 @@
 import { CreateOrderController } from './create-order'
-import { MissingParamError } from './error'
+import { MissingParamError } from '../error'
+
+const makeSut = (): CreateOrderController => {
+  return new CreateOrderController()
+}
 
 describe('Create Order Controller', () => {
   test('Should return 400 if no products are provided', () => {
-    const sut = new CreateOrderController()
+    const sut = makeSut()
     const httpRequest = {
       body: {}
     }
