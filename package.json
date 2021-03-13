@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/joaopedrobc/dm-backend-challenge/issues"
   },
-  "homepage": "https://github.com/joaopedrobc/dm-backend-challenge#readme"
+  "homepage": "https://github.com/joaopedrobc/dm-backend-challenge#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.0.1"
+  }
 }
