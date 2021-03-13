@@ -79,4 +79,31 @@ describe('Create Order Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  test('Should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        products: [
+          {
+            name: 'any_name',
+            quantity: 0
+          }
+        ]
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      products: [
+        {
+          name: 'valid_product_name',
+          quantity: 1,
+          price: 10
+        }
+      ],
+      total: 10
+    })
+  })
 })
