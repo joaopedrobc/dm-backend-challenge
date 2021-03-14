@@ -31,13 +31,14 @@ export class DbCreateOrder implements CreateOrder {
 
     const productsInStock = productsFromStock.filter(product => product.quantity > 0)
     const order = await this.createOrderRepository.create(Object.assign({}, orderData, { products: productsInStock.map(product => ({ name: product.name, quantity: product.quantity })) }))
+
     if (order) {
       const updatePromises: Array<Promise<ProductModel>> = []
       productsFromStock.forEach(async product => {
         updatePromises.push(this.updateProductRepositoryStub.update(product.id, product))
       })
+      await Promise.all(updatePromises)
     }
-    await Promise.all(productPromises)
 
     return order
   }
