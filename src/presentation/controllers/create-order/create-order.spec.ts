@@ -18,7 +18,7 @@ const makeCreateOrder = (): CreateOrder => {
         total: 10
       }
 
-      return await new Promise(resolve => resolve(fakeOrder))
+      return new Promise(resolve => resolve(fakeOrder))
     }
   }
 
@@ -63,7 +63,7 @@ describe('Create Order Controller', () => {
   test('Should return 500 if CreateOrder throws', async () => {
     const { sut, createOrderStub } = makeSut()
     jest.spyOn(createOrderStub, 'create').mockImplementationOnce(async () => {
-      return await new Promise((resolve, reject) => reject(new Error()))
+      return new Promise((resolve, reject) => reject(new Error()))
     })
     const httpRequest = {
       body: {
