@@ -26,9 +26,8 @@ export class DbCreateOrder implements CreateOrder {
       productsFromStock = products
     })
 
-    console.log(productsFromStock)
-
-    const order = await this.createOrderRepository.create(orderData)
+    const productsInStock = productsFromStock.filter(product => product.quantity > 0).map(product => ({ name: product.name, quantity: product.quantity }))
+    const order = await this.createOrderRepository.create(Object.assign({}, orderData, { products: productsInStock }))
     return order
   }
 }
