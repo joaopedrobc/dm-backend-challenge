@@ -2,8 +2,10 @@ import { OrderModel } from '../../../domain/models/order'
 import { ProductModel } from '../../../domain/models/product'
 import { CreateOrderModel } from '../../../domain/usecases/create-order'
 import { FindProductModel } from '../../../domain/usecases/find-product'
+import { UpdateProductModel } from '../../../domain/usecases/update-product'
 import { CreateOrderRepository } from '../../protocols/create-order-repository'
 import { FindProductRepository } from '../../protocols/find-product-repository'
+import { UpdateProductRepository } from '../../protocols/update-protocol-repository'
 import { DbCreateOrder } from './db-create-order'
 
 const makeCreateOrderRepository = (): CreateOrderRepository => {
@@ -49,20 +51,39 @@ const makeFindProductRepository = (): FindProductRepository => {
   return new FindProductRepositoryStub()
 }
 
+const makeUpdateProductRepository = (): UpdateProductRepository => {
+  class UpdateProductRepositoryStub implements UpdateProductRepository {
+    async update (id: string, productData: UpdateProductModel): Promise<ProductModel> {
+      const fakeProduct = {
+        id: 'any_id',
+        name: 'any_name',
+        quantity: 1,
+        price: 10
+      }
+      return new Promise(resolve => resolve(fakeProduct))
+    }
+  }
+
+  return new UpdateProductRepositoryStub()
+}
+
 interface SutType {
   sut: DbCreateOrder
   createOrderRepositoryStub: CreateOrderRepository
   findProductRepositoryStub: FindProductRepository
+  updateProductRepositoryStub: UpdateProductRepository
 }
 
 const makeSut = (): SutType => {
   const createOrderRepositoryStub: CreateOrderRepository = makeCreateOrderRepository()
   const findProductRepositoryStub: FindProductRepository = makeFindProductRepository()
-  const sut = new DbCreateOrder(createOrderRepositoryStub, findProductRepositoryStub)
+  const updateProductRepositoryStub: UpdateProductRepository = makeUpdateProductRepository()
+  const sut = new DbCreateOrder(createOrderRepositoryStub, findProductRepositoryStub, updateProductRepositoryStub)
   return {
     sut,
     createOrderRepositoryStub,
-    findProductRepositoryStub
+    findProductRepositoryStub,
+    updateProductRepositoryStub
   }
 }
 
@@ -147,5 +168,13 @@ describe('DbCreateOrder Usecase', () => {
       ],
       total: 10
     })
+  })
+
+  test('Should call UpdateProductRepository when an order is created with success', async () => {
+    const { sut, updateProductRepositoryStub } = makeSut()
+    const orderData = makeFakeOrder()
+    const updateSpy = jest.spyOn(updateProductRepositoryStub, 'update')
+    await sut.create(orderData)
+    expect(updateSpy).toBeCalledTimes(2)
   })
 })
