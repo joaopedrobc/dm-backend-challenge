@@ -1,4 +1,4 @@
-import { OrderModel } from '../model/order'
+import { OrderModel } from '../models/order'
 
 export interface CreateOrderModel {
   products: CreateOrderProductModel[]

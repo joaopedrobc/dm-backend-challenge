@@ -1,7 +1,8 @@
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { Controller, HttpRequest, HttpResponse } from '../../protocols'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
-import { CreateOrder } from '../../../domain/usecase/create-order'
+import { CreateOrder } from '../../../domain/usecases/create-order'
+import { Controller } from '../../protocols/controller'
+import { HttpRequest, HttpResponse } from '../../protocols/http'
 
 export class CreateOrderController implements Controller {
   private readonly createOrder: CreateOrder

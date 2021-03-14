@@ -1,7 +1,7 @@
 import { CreateOrderController } from './create-order'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
-import { CreateOrder, CreateOrderModel } from '../../../domain/usecase/create-order'
-import { OrderModel } from '../../../domain/model/order'
+import { CreateOrder, CreateOrderModel } from '../../../domain/usecases/create-order'
+import { OrderModel } from '../../../domain/models/order'
 
 const makeCreateOrder = (): CreateOrder => {
   class CreateOrderStub implements CreateOrder {
@@ -78,6 +78,38 @@ describe('Create Order Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should call CreateOrder with correct values', async () => {
+    const { sut, createOrderStub } = makeSut()
+    const createOrderSpy = jest.spyOn(createOrderStub, 'create')
+    const httpRequest = {
+      body: {
+        products: [
+          {
+            name: 'any_name',
+            quantity: 0
+          },
+          {
+            name: 'another_name',
+            quantity: 1
+          }
+        ]
+      }
+    }
+    await sut.handle(httpRequest)
+    expect(createOrderSpy).toHaveBeenCalledWith({
+      products: [
+        {
+          name: 'any_name',
+          quantity: 0
+        },
+        {
+          name: 'another_name',
+          quantity: 1
+        }
+      ]
+    })
   })
 
   test('Should return 200 if valid data is provided', async () => {
