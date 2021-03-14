@@ -10,5 +10,5 @@ export interface CreateOrderProductModel {
 }
 
 export interface CreateOrder {
-  create: (order: CreateOrderModel) => Promise<OrderModel>
+  create: (orderData: CreateOrderModel) => Promise<OrderModel>
 }

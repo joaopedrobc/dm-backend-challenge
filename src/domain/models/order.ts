@@ -1,7 +1,7 @@
-import { OrderProductModel } from './order-product'
+import { ProductModel } from './product'
 
 export interface OrderModel {
   id: string
-  products: OrderProductModel[]
+  products: ProductModel[]
   total: number
 }
