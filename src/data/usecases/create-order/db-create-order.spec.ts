@@ -100,6 +100,14 @@ describe('DbCreateOrder Usecase', () => {
     expect(findSpy).toHaveBeenCalledWith({ name: 'another_name' })
   })
 
+  test('Should throw if FindProductRepository throws', async () => {
+    const { sut, findProductRepositoryStub } = makeSut()
+    jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const orderData = makeFakeOrder()
+    const promise = sut.create(orderData)
+    await expect(promise).rejects.toThrow()
+  })
+
   test('Should return an order on success', async () => {
     const { sut } = makeSut()
     const orderData = makeFakeOrder()
