@@ -48,4 +48,19 @@ describe('DbCreateOrder Usecase', () => {
       ]
     })
   })
+
+  test('Should throw if CreateOrderRepository throws', async () => {
+    const { sut, createOrderRepositoryStub } = makeSut()
+    jest.spyOn(createOrderRepositoryStub, 'create').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const orderData = {
+      products: [
+        {
+          name: 'any_name',
+          quantity: 0
+        }
+      ]
+    }
+    const promise = sut.create(orderData)
+    await expect(promise).rejects.toThrow()
+  })
 })
