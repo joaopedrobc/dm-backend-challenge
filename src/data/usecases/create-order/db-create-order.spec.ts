@@ -177,4 +177,12 @@ describe('DbCreateOrder Usecase', () => {
     await sut.create(orderData)
     expect(updateSpy).toBeCalledTimes(2)
   })
+
+  test('Should throw if UpdateProductRepository throws', async () => {
+    const { sut, updateProductRepositoryStub } = makeSut()
+    jest.spyOn(updateProductRepositoryStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const orderData = makeFakeOrder()
+    const promise = sut.create(orderData)
+    await expect(promise).rejects.toThrow()
+  })
 })
