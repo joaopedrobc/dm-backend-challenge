@@ -6,7 +6,18 @@ import { DbCreateOrder } from './db-create-order'
 const makeCreateOrderRepository = (): CreateOrderRepository => {
   class CreateOrderRepositoryStub implements CreateOrderRepository {
     async create (orderData: CreateOrderModel): Promise<OrderModel> {
-      return new Promise(resolve => resolve(null))
+      const fakeData = {
+        id: 'valid_id',
+        products: [
+          {
+            name: 'any_name',
+            quantity: 0,
+            price: 10
+          }
+        ],
+        total: 10
+      }
+      return new Promise(resolve => resolve(fakeData))
     }
   }
   return new CreateOrderRepositoryStub()
@@ -62,5 +73,29 @@ describe('DbCreateOrder Usecase', () => {
     }
     const promise = sut.create(orderData)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an order on success', async () => {
+    const { sut } = makeSut()
+    const orderData = {
+      products: [
+        {
+          name: 'any_name',
+          quantity: 0
+        }
+      ]
+    }
+    const order = await sut.create(orderData)
+    expect(order).toEqual({
+      id: 'valid_id',
+      products: [
+        {
+          name: 'any_name',
+          quantity: 0,
+          price: 10
+        }
+      ],
+      total: 10
+    })
   })
 })
