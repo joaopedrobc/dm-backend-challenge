@@ -15,11 +15,18 @@ export class DbCreateOrder implements CreateOrder {
 
   async create (orderData: CreateOrderModel): Promise<OrderModel> {
     const { products } = orderData
-    const productsFromStock: ProductModel[] = []
+    const productsPromise: Array<Promise<ProductModel>> = []
+    let productsFromStock: ProductModel[] = []
 
     products.forEach(async product => {
-      productsFromStock.push(await this.findProductRepository.find({ name: product.name }))
+      productsPromise.push(this.findProductRepository.find({ name: product.name }))
     })
+
+    await Promise.all(productsPromise).then((products) => {
+      productsFromStock = products
+    })
+
+    console.log(productsFromStock)
 
     const order = await this.createOrderRepository.create(orderData)
     return order
