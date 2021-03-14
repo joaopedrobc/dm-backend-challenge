@@ -185,4 +185,12 @@ describe('DbCreateOrder Usecase', () => {
     const promise = sut.create(orderData)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return null if CreateOrderRepository returns null', async () => {
+    const { sut, createOrderRepositoryStub } = makeSut()
+    jest.spyOn(createOrderRepositoryStub, 'create').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const orderData = makeFakeOrder()
+    const order = await sut.create(orderData)
+    expect(order).toBeNull()
+  })
 })
