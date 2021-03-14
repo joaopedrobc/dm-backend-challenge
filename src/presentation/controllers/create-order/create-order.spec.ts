@@ -1,5 +1,5 @@
 import { CreateOrderController } from './create-order'
-import { InvalidParamError, MissingParamError, ServerError } from '../../error'
+import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { CreateOrder, CreateOrderModel } from '../../../domain/usecase/create-order'
 import { OrderModel } from '../../../domain/model/order'
 
