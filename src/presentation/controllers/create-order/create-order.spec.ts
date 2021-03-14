@@ -10,6 +10,7 @@ const makeCreateOrder = (): CreateOrder => {
         id: 'valid_id',
         products: [
           {
+            id: 'valid_id',
             name: 'valid_product_name',
             quantity: 1,
             price: 10
@@ -119,7 +120,7 @@ describe('Create Order Controller', () => {
         products: [
           {
             name: 'any_name',
-            quantity: 0
+            quantity: 1
           }
         ]
       }
@@ -130,6 +131,7 @@ describe('Create Order Controller', () => {
       id: 'valid_id',
       products: [
         {
+          id: 'valid_id',
           name: 'valid_product_name',
           quantity: 1,
           price: 10
