@@ -33,7 +33,7 @@ const makeFindProductRepository = (): FindProductRepository => {
       const fakeProduct = {
         id: 'any_id',
         name: 'any_name',
-        quantity: 0,
+        quantity: 2,
         price: 10
       }
       return new Promise(resolve => resolve(fakeProduct))
@@ -106,6 +106,19 @@ describe('DbCreateOrder Usecase', () => {
     const orderData = makeFakeOrder()
     const promise = sut.create(orderData)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call CreateOrderRepository only with products in stock', async () => {
+    const { sut, findProductRepositoryStub } = makeSut()
+    jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise(resolve => resolve({
+      id: 'any_id',
+      name: 'any_name',
+      quantity: 0,
+      price: 10
+    })))
+    const orderData = makeFakeOrder()
+    const order = await sut.create(orderData)
+    expect(order.products.length).toBe(1)
   })
 
   test('Should return an order on success', async () => {
