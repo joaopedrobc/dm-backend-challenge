@@ -3,5 +3,5 @@ export interface FindProductModel {
 }
 
 export interface FindProduct {
-  find: (order: FindProductModel) => Promise<FindProductModel>
+  find: (productData: FindProductModel) => Promise<FindProductModel>
 }
