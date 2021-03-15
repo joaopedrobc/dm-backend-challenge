@@ -1,9 +1,9 @@
-import { OrderModel } from '../../domain/models/order'
+import { ListOrderModel } from '../../domain/models/list-order'
 
 export interface FindOrderModel {
   id?: string
 }
 
 export interface FindOrderRepository {
-  find: (id: FindOrderModel) => Promise<OrderModel[]>
+  find: (id: FindOrderModel) => Promise<ListOrderModel>
 }
