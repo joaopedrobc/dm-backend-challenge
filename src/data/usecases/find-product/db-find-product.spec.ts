@@ -7,7 +7,12 @@ describe('DbFindProduct Usecase', () => {
   const makeFindProductRepositoryStub = (): FindProductRepository => {
     class FindProductRepositoryStub implements FindProductRepository {
       async find (productData: FindProductModel): Promise<ProductModel> {
-        return new Promise(resolve => resolve(null))
+        const fakeData = {
+          name: 'Kiwi',
+          quantity: 1,
+          price: 10
+        }
+        return new Promise(resolve => resolve(fakeData))
       }
     }
 
@@ -34,5 +39,15 @@ describe('DbFindProduct Usecase', () => {
     jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.find({ name: 'Kiwi' })
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an product on success', async () => {
+    const { sut } = makeSut()
+    const order = await sut.find({ name: 'Kiwi' })
+    expect(order).toEqual({
+      name: 'Kiwi',
+      quantity: 1,
+      price: 10
+    })
   })
 })
