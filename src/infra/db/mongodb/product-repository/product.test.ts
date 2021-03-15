@@ -66,4 +66,11 @@ describe('Product Mongo Repository', () => {
     const afterUpdateResult = await orderCollection.find()
     expect((await afterUpdateResult.toArray()).length).toBe(1)
   })
+
+  test('Should returns empty object if MongoHelper map receives null', async () => {
+    const sut = makeSut()
+    const mapSpy = jest.spyOn(MongoHelper, 'mapWithoutId')
+    await sut.find({ name: 'Kiwi' })
+    expect(mapSpy).toReturnWith({})
+  })
 })

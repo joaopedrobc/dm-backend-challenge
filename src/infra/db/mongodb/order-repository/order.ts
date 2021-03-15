@@ -18,6 +18,6 @@ export class OrderMongoRepository implements CreateOrderRepository, FindOrderRep
       MongoHelper.map(order)
     ))
 
-    return MongoHelper.map(ordersMapped)
+    return ordersMapped
   }
 }
