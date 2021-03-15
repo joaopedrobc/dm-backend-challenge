@@ -61,7 +61,7 @@ describe('Order Routes', () => {
     expect(product.quantity).toBe(8)
   })
 
-  test('Should return orders on success', async () => {
+  test('Should return orders on success /orders', async () => {
     const productCollection = await MongoHelper.getCollection('products')
     const orderCollection = await MongoHelper.getCollection('orders')
     await productCollection.insertOne({
@@ -79,6 +79,27 @@ describe('Order Routes', () => {
     })
     await request(app)
       .get('/orders')
+      .expect(200)
+  })
+
+  test('Should return orders on success /orders/:orderId', async () => {
+    const productCollection = await MongoHelper.getCollection('products')
+    const orderCollection = await MongoHelper.getCollection('orders')
+    await productCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 10,
+      price: 5.90
+    })
+    await orderCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 2
+    })
+    await orderCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 3
+    })
+    await request(app)
+      .get('/orders/any_id')
       .expect(200)
   })
 })
