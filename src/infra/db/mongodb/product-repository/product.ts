@@ -1,5 +1,5 @@
 import { FindProductRepository } from '../../../../data/protocols/find-product-repository'
-import { UpdateProductRepository } from '../../../../data/protocols/update-protocol-repository'
+import { UpdateProductRepository } from '../../../../data/protocols/update-product-repository'
 import { ProductModel } from '../../../../domain/models/product'
 import { FindProductModel } from '../../../../domain/usecases/find-product'
 import { UpdateProductModel } from '../../../../domain/usecases/update-product'

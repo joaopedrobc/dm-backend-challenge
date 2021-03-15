@@ -3,7 +3,7 @@ import { ProductModel } from '../../../domain/models/product'
 import { CreateOrder, CreateOrderModel, CreateOrderProductModel } from '../../../domain/usecases/create-order'
 import { CreateFullOrderModel, CreateFullOrderProductModel, CreateOrderRepository } from '../../protocols/create-order-repository'
 import { FindProductRepository } from '../../protocols/find-product-repository'
-import { UpdateProductRepository } from '../../protocols/update-protocol-repository'
+import { UpdateProductRepository } from '../../protocols/update-product-repository'
 
 export class DbCreateOrder implements CreateOrder {
   private readonly createOrderRepository: CreateOrderRepository
