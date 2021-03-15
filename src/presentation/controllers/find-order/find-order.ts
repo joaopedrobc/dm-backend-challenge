@@ -18,12 +18,18 @@ export class FindOrderController implements Controller {
       if (params) {
         const orderId = params.orderId
         orders = await this.findOrder.find({ id: orderId })
+        return ok({ orders: orders })
       } else {
         orders = await this.findOrder.find({})
+        let response = ok({})
+        if (orders.length === 0) {
+          response = ok(orders[0])
+        }
+
+        return response
       }
     } catch (error) {
       return serverError()
     }
-    return ok(orders)
   }
 }

@@ -39,7 +39,7 @@ describe('Order Mongo Repository', () => {
     expect(order.total).toBe(19.42)
   })
 
-  test('Should return orders on success', async () => {
+  test('Should return "orders" wrapper on success with more than one order listed', async () => {
     const sut = makeSut()
     await sut.create({
       products: [
@@ -56,9 +56,18 @@ describe('Order Mongo Repository', () => {
       ],
       total: 27.55
     })
+    await sut.create({
+      products: [
+        {
+          name: 'Kiwi',
+          quantity: 1,
+          price: 9.71
+        }
+      ],
+      total: 27.55
+    })
     const result = await sut.find({})
-    expect(result.orders).toBeTruthy()
-    expect(result.orders.length).toBe(1)
-    expect(result.orders[0].products.length).toBe(2)
+    expect(result[0].products.length).toBe(2)
+    expect(result[1].products.length).toBe(1)
   })
 })

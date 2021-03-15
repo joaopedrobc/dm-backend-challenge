@@ -1,6 +1,5 @@
 import { CreateFullOrderModel, CreateOrderRepository } from '../../../../data/protocols/create-order-repository'
 import { FindOrderModel, FindOrderRepository } from '../../../../data/protocols/find-order-repository'
-import { ListOrderModel } from '../../../../domain/models/list-order'
 import { OrderModel } from '../../../../domain/models/order'
 import { MongoHelper } from '../helpers/mongo-helper'
 
@@ -11,7 +10,7 @@ export class OrderMongoRepository implements CreateOrderRepository, FindOrderRep
     return MongoHelper.map(result.ops[0])
   }
 
-  async find (id: FindOrderModel): Promise<ListOrderModel> {
+  async find (id: FindOrderModel): Promise<OrderModel[]> {
     const orderCollection = MongoHelper.getCollection('orders')
     const result = await orderCollection.find(id)
     const orders = await result.toArray()
@@ -19,6 +18,6 @@ export class OrderMongoRepository implements CreateOrderRepository, FindOrderRep
       MongoHelper.map(order)
     ))
 
-    return MongoHelper.map({ orders: ordersMapped })
+    return MongoHelper.map(ordersMapped)
   }
 }

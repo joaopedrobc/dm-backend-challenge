@@ -1,12 +1,23 @@
-import { ListOrderModel } from '../../../domain/models/list-order'
+import { OrderModel } from '../../../domain/models/order'
 import { FindOrder, FindOrderModel } from '../../../domain/usecases/find-order'
 import { ServerError } from '../../errors'
 import { FindOrderController } from './find-order'
 
 const makeFindOrder = (): FindOrder => {
   class FindOrderStub implements FindOrder {
-    async find (id: FindOrderModel): Promise<ListOrderModel> {
-      return new Promise(resolve => resolve(null))
+    async find (id: FindOrderModel): Promise<OrderModel[]> {
+      const fakeData = [{
+        id: 'any_id',
+        products: [
+          {
+            name: 'Coffee',
+            quantity: 3,
+            price: 2.43
+          }
+        ],
+        total: 7.29
+      }]
+      return new Promise(resolve => resolve(fakeData))
     }
   }
 
@@ -77,13 +88,10 @@ describe('Find Order Controller', () => {
     expect(httpResponse.statusCode).toBe(200)
   })
 
-  test('Should return 200 if param orderId is provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      params: {
-        orderId: 'any_order_id'
-      }
-    }
+  test('Should return 200 if no params provided and is empty', async () => {
+    const { sut, findOrderStub } = makeSut()
+    jest.spyOn(findOrderStub, 'find').mockReturnValueOnce(new Promise(resolve => resolve([])))
+    const httpRequest = {}
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
   })
