@@ -10,6 +10,11 @@ describe('Order Mongo Repository', () => {
     await MongoHelper.disconnect()
   })
 
+  beforeEach(async () => {
+    const orderCollection = await MongoHelper.getCollection('orders')
+    await orderCollection.deleteMany({})
+  })
+
   test('Should return an order on success', async () => {
     const sut = new OrderMongoRepository()
     const order = await sut.create({
