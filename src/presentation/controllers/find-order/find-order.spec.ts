@@ -58,8 +58,11 @@ describe('Find Order Controller', () => {
 
     expect(findSpy).toHaveBeenCalledWith({})
   })
-  // test('Should return 200 if valid data is provided', async () => {
-  //   const { sut } = makeSut()
-  //   sut.find()
-  // })
+
+  test('Should return 200 if no params are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {}
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
 })
