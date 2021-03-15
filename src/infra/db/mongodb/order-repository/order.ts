@@ -6,8 +6,6 @@ export class OrderMongoRepository implements CreateOrderRepository {
   async create (orderData: CreateFullOrderModel): Promise<OrderModel> {
     const orderCollection = MongoHelper.getCollection('orders')
     const result = await orderCollection.insertOne(orderData)
-    const order = result.ops[0]
-    const { _id, ...orderWithoutId } = order
-    return Object.assign({}, orderWithoutId, { id: _id })
+    return MongoHelper.map(result.ops[0])
   }
 }
