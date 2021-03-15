@@ -1,6 +1,6 @@
 import { OrderModel } from '../../../domain/models/order'
 import { ProductModel } from '../../../domain/models/product'
-import { CreateOrder, CreateOrderModel } from '../../../domain/usecases/create-order'
+import { CreateOrder, CreateOrderModel, CreateOrderProductModel } from '../../../domain/usecases/create-order'
 import { CreateFullOrderModel, CreateFullOrderProductModel, CreateOrderRepository } from '../../protocols/create-order-repository'
 import { FindProductRepository } from '../../protocols/find-product-repository'
 import { UpdateProductRepository } from '../../protocols/update-protocol-repository'
@@ -17,6 +17,7 @@ export class DbCreateOrder implements CreateOrder {
   }
 
   async create (orderData: CreateOrderModel): Promise<OrderModel> {
+    console.log(orderData)
     const { products } = orderData
     const productPromises: Array<Promise<ProductModel>> = []
     let productsFromStock: ProductModel[] = []
@@ -29,12 +30,22 @@ export class DbCreateOrder implements CreateOrder {
       productsFromStock = products
     })
 
+    console.log(productsFromStock)
+
     const productsInStockAvaliableForOrder = productsFromStock.filter(productInStock => productInStock.quantity >= products.filter(product => product.name === productInStock.name)[0].quantity)
-    const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => ({
-      name: product.name,
-      quantity: product.quantity,
-      price: product.price
-    }))
+
+    console.log(productsInStockAvaliableForOrder)
+
+    const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => {
+      const productForOrder: CreateOrderProductModel = products.filter(productFromOrder => productsInStockAvaliableForOrder.filter(product => product.name === productFromOrder.name))[0]
+      return {
+        name: product.name,
+        quantity: productForOrder.quantity,
+        price: product.price
+      }
+    })
+
+    console.log(productsForOrder)
 
     let total = 0
     productsForOrder.forEach(product => {
@@ -52,8 +63,11 @@ export class DbCreateOrder implements CreateOrder {
 
       if (order) {
         const updatePromises: Array<Promise<ProductModel>> = []
-        productsFromStock.forEach(async product => {
-          updatePromises.push(this.updateProductRepository.update(product.name, product))
+        productsForOrder.forEach(async product => {
+          const inStock = productsInStockAvaliableForOrder.filter(productInStock => productInStock.name === product.name)[0]
+          const { quantity, ...rest } = product
+          const updatedQuantityProduct = Object.assign({}, rest, { quantity: inStock.quantity - product.quantity })
+          updatePromises.push(this.updateProductRepository.update({ name: product.name }, updatedQuantityProduct))
         })
         await Promise.all(updatePromises)
       }

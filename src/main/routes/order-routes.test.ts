@@ -14,19 +14,50 @@ describe('Order Routes', () => {
   beforeEach(async () => {
     const orderCollection = await MongoHelper.getCollection('orders')
     await orderCollection.deleteMany({})
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.deleteMany({})
   })
 
-  test('Should return an account on success', async () => {
+  test('Should return an order on success', async () => {
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 10,
+      price: 5.90
+    })
+
     await request(app)
       .post('/orders')
       .send({
         products: [
           {
             name: 'Kiwi',
-            quantity: 1
+            quantity: 2
           }
         ]
       })
       .expect(200)
+  })
+
+  test('Should decrease product quantity on success', async () => {
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 10,
+      price: 5.90
+    })
+
+    await request(app)
+      .post('/orders')
+      .send({
+        products: [
+          {
+            name: 'Kiwi',
+            quantity: 2
+          }
+        ]
+      })
+    const product = await productCollection.findOne({ name: 'Kiwi' })
+    expect(product.quantity).toBe(8)
   })
 })

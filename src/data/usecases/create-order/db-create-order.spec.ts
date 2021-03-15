@@ -53,7 +53,7 @@ const makeFindProductRepository = (): FindProductRepository => {
 
 const makeUpdateProductRepository = (): UpdateProductRepository => {
   class UpdateProductRepositoryStub implements UpdateProductRepository {
-    async update (id: string, productData: UpdateProductModel): Promise<ProductModel> {
+    async update (id: FindProductModel, productData: UpdateProductModel): Promise<ProductModel> {
       const fakeProduct = {
         name: 'Brazil nut',
         quantity: 1,

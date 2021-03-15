@@ -21,8 +21,8 @@ describe('Product Mongo Repository', () => {
 
   test('Should return an product on success', async () => {
     const sut = makeSut()
-    const orderCollection = await MongoHelper.getCollection('products')
-    await orderCollection.insertOne({
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.insertOne({
       name: 'Kiwi',
       quantity: 10,
       price: 5.90
@@ -37,8 +37,8 @@ describe('Product Mongo Repository', () => {
 
   test('Should return an product with updated values after update success', async () => {
     const sut = makeSut()
-    const orderCollection = await MongoHelper.getCollection('products')
-    await orderCollection.insertOne({
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.insertOne({
       name: 'Kiwi',
       quantity: 10,
       price: 5.90
