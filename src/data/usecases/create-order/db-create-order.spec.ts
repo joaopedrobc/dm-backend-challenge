@@ -40,9 +40,9 @@ const makeFindProductRepository = (): FindProductRepository => {
     async find (productData: FindProductModel): Promise<ProductModel> {
       const fakeProduct = {
         id: 'any_id',
-        name: 'any_name',
-        quantity: 1,
-        price: 10
+        name: 'Brazil nut',
+        quantity: 5,
+        price: 5.16
       }
       return new Promise(resolve => resolve(fakeProduct))
     }
@@ -56,7 +56,7 @@ const makeUpdateProductRepository = (): UpdateProductRepository => {
     async update (id: string, productData: UpdateProductModel): Promise<ProductModel> {
       const fakeProduct = {
         id: 'any_id',
-        name: 'any_name',
+        name: 'Brazil nut',
         quantity: 1,
         price: 10
       }
@@ -90,25 +90,13 @@ const makeSut = (): SutType => {
 const makeFakeOrder = (): CreateOrderModel => ({
   products: [
     {
-      name: 'any_name',
-      quantity: 1
-    },
-    {
-      name: 'any_name',
-      quantity: 1
+      name: 'Brazil nut',
+      quantity: 5
     }
   ]
 })
 
 describe('DbCreateOrder Usecase', () => {
-  test('Should call CreateOrderRepository with correct values', async () => {
-    const { sut, createOrderRepositoryStub } = makeSut()
-    const createSpy = jest.spyOn(createOrderRepositoryStub, 'create')
-    const orderData = makeFakeOrder()
-    await sut.create(orderData)
-    expect(createSpy).toHaveBeenCalledWith(orderData)
-  })
-
   test('Should throw if CreateOrderRepository throws', async () => {
     const { sut, createOrderRepositoryStub } = makeSut()
     jest.spyOn(createOrderRepositoryStub, 'create').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
@@ -129,21 +117,14 @@ describe('DbCreateOrder Usecase', () => {
     const { sut, findProductRepositoryStub, createOrderRepositoryStub } = makeSut()
     jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise(resolve => resolve({
       id: 'any_id',
-      name: 'any_name',
-      quantity: 0,
-      price: 10
+      name: 'Brazil nut',
+      quantity: 1,
+      price: 9.21
     })))
     const createSpy = jest.spyOn(createOrderRepositoryStub, 'create')
     const orderData = makeFakeOrder()
     await sut.create(orderData)
-    expect(createSpy).toHaveBeenCalledWith({
-      products: [
-        {
-          name: 'any_name',
-          quantity: 1
-        }
-      ]
-    })
+    expect(createSpy).toBeCalledTimes(0)
   })
 
   test('Should return an order on success', async () => {
@@ -175,7 +156,7 @@ describe('DbCreateOrder Usecase', () => {
     const orderData = makeFakeOrder()
     const updateSpy = jest.spyOn(updateProductRepositoryStub, 'update')
     await sut.create(orderData)
-    expect(updateSpy).toBeCalledTimes(2)
+    expect(updateSpy).toBeCalledTimes(1)
   })
 
   test('Should throw if UpdateProductRepository throws', async () => {

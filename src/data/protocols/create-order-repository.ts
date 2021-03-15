@@ -1,6 +1,16 @@
 import { OrderModel } from '../../domain/models/order'
-import { CreateOrderModel } from '../../domain/usecases/create-order'
+
+export interface CreateFullOrderModel {
+  products: CreateFullOrderProductModel[]
+  total: number
+}
+
+export interface CreateFullOrderProductModel {
+  name: string
+  price: number
+  quantity: number
+}
 
 export interface CreateOrderRepository {
-  create: (orderData: CreateOrderModel) => Promise<OrderModel>
+  create: (orderData: CreateFullOrderModel) => Promise<OrderModel>
 }
