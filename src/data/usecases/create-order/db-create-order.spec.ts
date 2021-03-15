@@ -55,7 +55,6 @@ const makeUpdateProductRepository = (): UpdateProductRepository => {
   class UpdateProductRepositoryStub implements UpdateProductRepository {
     async update (id: string, productData: UpdateProductModel): Promise<ProductModel> {
       const fakeProduct = {
-        id: 'any_id',
         name: 'Brazil nut',
         quantity: 1,
         price: 10
@@ -116,7 +115,6 @@ describe('DbCreateOrder Usecase', () => {
   test('Should call CreateOrderRepository only with products in stock', async () => {
     const { sut, findProductRepositoryStub, createOrderRepositoryStub } = makeSut()
     jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise(resolve => resolve({
-      id: 'any_id',
       name: 'Brazil nut',
       quantity: 1,
       price: 9.21

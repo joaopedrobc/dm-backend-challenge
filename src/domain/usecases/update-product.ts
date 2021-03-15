@@ -7,5 +7,5 @@ export interface UpdateProductModel {
 }
 
 export interface UpdateProduct {
-  update: (id: string, productData: UpdateProductModel) => Promise<ProductModel>
+  update: (name: string, productData: UpdateProductModel) => Promise<ProductModel>
 }

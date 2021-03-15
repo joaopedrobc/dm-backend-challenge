@@ -8,12 +8,12 @@ import { UpdateProductRepository } from '../../protocols/update-protocol-reposit
 export class DbCreateOrder implements CreateOrder {
   private readonly createOrderRepository: CreateOrderRepository
   private readonly findProductRepository: FindProductRepository
-  private readonly updateProductRepositoryStub: UpdateProductRepository
+  private readonly updateProductRepository: UpdateProductRepository
 
-  constructor (createOrderRepository: CreateOrderRepository, findProductRepository: FindProductRepository, updateProductRepositoryStub: UpdateProductRepository) {
+  constructor (createOrderRepository: CreateOrderRepository, findProductRepository: FindProductRepository, updateProductRepository: UpdateProductRepository) {
     this.createOrderRepository = createOrderRepository
     this.findProductRepository = findProductRepository
-    this.updateProductRepositoryStub = updateProductRepositoryStub
+    this.updateProductRepository = updateProductRepository
   }
 
   async create (orderData: CreateOrderModel): Promise<OrderModel> {
@@ -29,16 +29,7 @@ export class DbCreateOrder implements CreateOrder {
       productsFromStock = products
     })
 
-    console.log('products: ')
-    console.log(products)
-
-    console.log('productsFromStock: ')
-    console.log(productsFromStock)
-
     const productsInStockAvaliableForOrder = productsFromStock.filter(productInStock => productInStock.quantity >= products.filter(product => product.name === productInStock.name)[0].quantity)
-    console.log('productsInStockAvaliableForOrder: ')
-    console.log(productsInStockAvaliableForOrder)
-
     const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => ({
       name: product.name,
       quantity: product.quantity,
@@ -62,7 +53,7 @@ export class DbCreateOrder implements CreateOrder {
       if (order) {
         const updatePromises: Array<Promise<ProductModel>> = []
         productsFromStock.forEach(async product => {
-          updatePromises.push(this.updateProductRepositoryStub.update(product.id, product))
+          updatePromises.push(this.updateProductRepository.update(product.name, product))
         })
         await Promise.all(updatePromises)
       }
