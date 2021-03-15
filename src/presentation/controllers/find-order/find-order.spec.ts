@@ -65,4 +65,26 @@ describe('Find Order Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
   })
+
+  test('Should return 200 if param orderId is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      params: {
+        orderId: 'any_order_id'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
+
+  test('Should return 200 if param orderId is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      params: {
+        orderId: 'any_order_id'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
 })
