@@ -1,11 +1,11 @@
-import { OrderModel } from '../../../domain/models/order'
+import { ListOrderModel } from '../../../domain/models/list-order'
 import { FindOrder, FindOrderModel } from '../../../domain/usecases/find-order'
 import { ServerError } from '../../errors'
 import { FindOrderController } from './find-order'
 
 const makeFindOrder = (): FindOrder => {
   class FindOrderStub implements FindOrder {
-    async find (productData: FindOrderModel): Promise<OrderModel[]> {
+    async find (id: FindOrderModel): Promise<ListOrderModel> {
       return new Promise(resolve => resolve(null))
     }
   }
