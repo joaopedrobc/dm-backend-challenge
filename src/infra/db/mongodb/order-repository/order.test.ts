@@ -15,8 +15,12 @@ describe('Order Mongo Repository', () => {
     await orderCollection.deleteMany({})
   })
 
+  const makeSut = (): OrderMongoRepository => {
+    return new OrderMongoRepository()
+  }
+
   test('Should return an order on success', async () => {
-    const sut = new OrderMongoRepository()
+    const sut = makeSut()
     const order = await sut.create({
       products: [
         {
