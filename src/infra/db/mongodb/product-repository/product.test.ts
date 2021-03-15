@@ -34,4 +34,36 @@ describe('Product Mongo Repository', () => {
     expect(product.quantity).toBe(10)
     expect(product.price).toBe(5.90)
   })
+
+  test('Should return an product with updated values after update success', async () => {
+    const sut = makeSut()
+    const orderCollection = await MongoHelper.getCollection('products')
+    await orderCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 10,
+      price: 5.90
+    })
+
+    const product = await sut.update({ name: 'Kiwi' }, { name: 'Kiwi', quantity: 9, price: 5.90 })
+    expect(product).toBeTruthy()
+    expect(product.name).toBe('Kiwi')
+    expect(product.quantity).toBe(9)
+    expect(product.price).toBe(5.90)
+  })
+
+  test('Should updated values not add new document after update success', async () => {
+    const sut = makeSut()
+    const orderCollection = await MongoHelper.getCollection('products')
+    await orderCollection.insertOne({
+      name: 'Kiwi',
+      quantity: 10,
+      price: 5.90
+    })
+
+    const beforeUpdateResult = await orderCollection.find()
+    expect((await beforeUpdateResult.toArray()).length).toBe(1)
+    await sut.update({ name: 'Kiwi' }, { name: 'Kiwi', quantity: 9, price: 5.90 })
+    const afterUpdateResult = await orderCollection.find()
+    expect((await afterUpdateResult.toArray()).length).toBe(1)
+  })
 })
