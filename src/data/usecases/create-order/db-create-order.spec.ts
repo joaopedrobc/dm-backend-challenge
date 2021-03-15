@@ -5,7 +5,7 @@ import { FindProductModel } from '../../../domain/usecases/find-product'
 import { UpdateProductModel } from '../../../domain/usecases/update-product'
 import { CreateOrderRepository } from '../../protocols/create-order-repository'
 import { FindProductRepository } from '../../protocols/find-product-repository'
-import { UpdateProductRepository } from '../../protocols/update-protocol-repository'
+import { UpdateProductRepository } from '../../protocols/update-product-repository'
 import { DbCreateOrder } from './db-create-order'
 
 const makeCreateOrderRepository = (): CreateOrderRepository => {
