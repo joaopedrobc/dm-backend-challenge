@@ -50,6 +50,14 @@ describe('Find Order Controller', () => {
     expect(findSpy).toHaveBeenCalledWith({ id: 'any_order_id' })
   })
 
+  test('Should call FindOrder with empty id if params not exists', async () => {
+    const { sut, findOrderStub } = makeSut()
+    const findSpy = jest.spyOn(findOrderStub, 'find')
+    const httpRequest = {}
+    await sut.handle(httpRequest)
+
+    expect(findSpy).toHaveBeenCalledWith({})
+  })
   // test('Should return 200 if valid data is provided', async () => {
   //   const { sut } = makeSut()
   //   sut.find()
