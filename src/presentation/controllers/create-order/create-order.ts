@@ -15,8 +15,6 @@ export class CreateOrderController implements Controller {
     try {
       const { body } = httpRequest
 
-      console.log(body)
-
       const requiredFields = ['products']
       for (const field of requiredFields) {
         if (!body[field]) {
@@ -28,10 +26,8 @@ export class CreateOrderController implements Controller {
       if (products && Object.keys(products).length === 0) {
         return badRequest(new InvalidParamError('products'))
       }
-      console.log(products)
 
       const order = await this.createOrder.create(body)
-      console.log(order)
       return ok(order)
     } catch (error) {
       return serverError()

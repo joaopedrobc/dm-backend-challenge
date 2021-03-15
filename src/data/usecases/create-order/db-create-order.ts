@@ -17,7 +17,6 @@ export class DbCreateOrder implements CreateOrder {
   }
 
   async create (orderData: CreateOrderModel): Promise<OrderModel> {
-    console.log(orderData)
     const { products } = orderData
     const productPromises: Array<Promise<ProductModel>> = []
     let productsFromStock: ProductModel[] = []
@@ -30,12 +29,7 @@ export class DbCreateOrder implements CreateOrder {
       productsFromStock = products
     })
 
-    console.log(productsFromStock)
-
     const productsInStockAvaliableForOrder = productsFromStock.filter(productInStock => productInStock.quantity >= products.filter(product => product.name === productInStock.name)[0].quantity)
-
-    console.log(productsInStockAvaliableForOrder)
-
     const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => {
       const productForOrder: CreateOrderProductModel = products.filter(productFromOrder => productsInStockAvaliableForOrder.filter(product => product.name === productFromOrder.name))[0]
       return {
@@ -44,8 +38,6 @@ export class DbCreateOrder implements CreateOrder {
         price: product.price
       }
     })
-
-    console.log(productsForOrder)
 
     let total = 0
     productsForOrder.forEach(product => {
