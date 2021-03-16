@@ -1,5 +1,6 @@
-const env = require('./src/main/config/env')
-const config = {
+import env from './src/main/config/env'
+
+export = {
   mongodb: {
     url: env.mongoUrl,
     databaseName: env.database,
@@ -14,5 +15,3 @@ const config = {
   migrationFileExtension: '.ts',
   useFileHash: false
 }
-
-module.exports = config
