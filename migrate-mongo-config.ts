@@ -2,8 +2,8 @@ import env from './src/main/config/env'
 
 export = {
   mongodb: {
-    url: env.mongoUrl,
-    databaseName: env.database,
+    url: env.mongo.url,
+    databaseName: env.mongo.database,
 
     options: {
       useNewUrlParser: true,
