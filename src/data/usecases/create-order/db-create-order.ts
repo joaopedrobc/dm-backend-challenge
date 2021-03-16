@@ -1,6 +1,7 @@
 import { OrderModel } from '../../../domain/models/order'
 import { ProductModel } from '../../../domain/models/product'
 import { CreateOrder, CreateOrderModel, CreateOrderProductModel } from '../../../domain/usecases/create-order'
+import { ProductsNoStockError } from '../../errors/products-no-stock-error'
 import { CreateFullOrderModel, CreateFullOrderProductModel, CreateOrderRepository } from '../../protocols/create-order-repository'
 import { FindProductRepository } from '../../protocols/find-product-repository'
 import { UpdateProductRepository } from '../../protocols/update-product-repository'
@@ -27,9 +28,13 @@ export class DbCreateOrder implements CreateOrder {
 
     await Promise.all(productPromises).then((products) => {
       productsFromStock = products
+    }).catch((error) => {
+      throw error
     })
 
     const productsInStockAvaliableForOrder = productsFromStock.filter(productInStock => productInStock.quantity >= products.filter(product => product.name === productInStock.name)[0].quantity)
+    if (productsInStockAvaliableForOrder.length < products.length) throw new ProductsNoStockError()
+
     const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => {
       const forOrder: CreateOrderProductModel = products.filter(productFromOrder => productFromOrder.name === product.name)[0]
       return {

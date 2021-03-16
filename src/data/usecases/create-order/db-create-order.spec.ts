@@ -112,19 +112,6 @@ describe('DbCreateOrder Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should call CreateOrderRepository only with products in stock', async () => {
-    const { sut, findProductRepositoryStub, createOrderRepositoryStub } = makeSut()
-    jest.spyOn(findProductRepositoryStub, 'find').mockReturnValueOnce(new Promise(resolve => resolve({
-      name: 'Brazil nut',
-      quantity: 1,
-      price: 9.21
-    })))
-    const createSpy = jest.spyOn(createOrderRepositoryStub, 'create')
-    const orderData = makeFakeOrder()
-    await sut.create(orderData)
-    expect(createSpy).toBeCalledTimes(0)
-  })
-
   test('Should return an order on success', async () => {
     const { sut } = makeSut()
     const orderData = makeFakeOrder()

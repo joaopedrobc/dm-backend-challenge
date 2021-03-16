@@ -3,6 +3,8 @@ import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { CreateOrder } from '../../../domain/usecases/create-order'
 import { Controller } from '../../protocols/controller'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
+import { ProductsNoStockError } from '../../../data/errors/products-no-stock-error'
+import { ProductInexistentError } from '../../../data/errors/produts-inexistent-error'
 
 export class CreateOrderController implements Controller {
   private readonly createOrder: CreateOrder
@@ -30,6 +32,8 @@ export class CreateOrderController implements Controller {
       const order = await this.createOrder.create(body)
       return ok(order)
     } catch (error) {
+      if (error instanceof ProductsNoStockError) return badRequest(error)
+      if (error instanceof ProductInexistentError) return badRequest(error)
       return serverError()
     }
   }

@@ -1,5 +1,6 @@
+import { ProductInexistentError } from '../../../data/errors/produts-inexistent-error'
 import { FindProduct } from '../../../domain/usecases/find-product'
-import { ok, serverError } from '../../helpers/http-helper'
+import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Controller } from '../../protocols/controller'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 
@@ -17,6 +18,10 @@ export class FindProductController implements Controller {
       const product = await this.findProduct.find({ name: name })
       return ok(product)
     } catch (error) {
+      if (error instanceof ProductInexistentError) {
+        return badRequest(error)
+      }
+
       return serverError()
     }
   }

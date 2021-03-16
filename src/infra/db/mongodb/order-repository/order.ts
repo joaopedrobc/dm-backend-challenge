@@ -19,6 +19,7 @@ export class OrderMongoRepository implements CreateOrderRepository, FindOrderRep
     } else {
       result = await orderCollection.find(order)
     }
+
     const orders = await result.toArray()
     const ordersMapped = orders.map(order => (
       MongoHelper.map(order)
