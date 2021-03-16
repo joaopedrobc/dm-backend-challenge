@@ -11,8 +11,8 @@ describe('Product Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    const orderCollection = await MongoHelper.getCollection('products')
-    await orderCollection.deleteMany({})
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.deleteMany({})
   })
 
   const makeSut = (): ProductMongoRepository => {
@@ -53,17 +53,17 @@ describe('Product Mongo Repository', () => {
 
   test('Should updated values not add new document after update success', async () => {
     const sut = makeSut()
-    const orderCollection = await MongoHelper.getCollection('products')
-    await orderCollection.insertOne({
+    const productCollection = await MongoHelper.getCollection('products')
+    await productCollection.insertOne({
       name: 'Kiwi',
       quantity: 10,
       price: 5.90
     })
 
-    const beforeUpdateResult = await orderCollection.find()
+    const beforeUpdateResult = await productCollection.find()
     expect((await beforeUpdateResult.toArray()).length).toBe(1)
     await sut.update({ name: 'Kiwi' }, { name: 'Kiwi', quantity: 9, price: 5.90 })
-    const afterUpdateResult = await orderCollection.find()
+    const afterUpdateResult = await productCollection.find()
     expect((await afterUpdateResult.toArray()).length).toBe(1)
   })
 

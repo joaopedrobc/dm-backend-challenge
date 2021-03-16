@@ -7,15 +7,15 @@ import { MongoHelper } from '../helpers/mongo-helper'
 
 export class ProductMongoRepository implements FindProductRepository, UpdateProductRepository {
   async find (productData: FindProductModel): Promise<ProductModel> {
-    const orderCollection = MongoHelper.getCollection('products')
-    const result = await orderCollection.findOne(productData)
+    const productCollection = MongoHelper.getCollection('products')
+    const result = await productCollection.findOne(productData)
     return MongoHelper.mapWithoutId(result)
   }
 
   async update (name: FindProductModel, productData: UpdateProductModel): Promise<ProductModel> {
-    const orderCollection = MongoHelper.getCollection('products')
+    const productCollection = MongoHelper.getCollection('products')
     const newValues = { $set: productData }
-    await orderCollection.updateOne(name, newValues)
+    await productCollection.updateOne(name, newValues)
     return this.find({ name: productData.name })
   }
 }
