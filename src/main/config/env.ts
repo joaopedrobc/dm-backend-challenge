@@ -1,7 +1,9 @@
 export default {
   mongo: {
     url: process.env.MONGO_URL || 'mongodb://localhost:27017',
-    database: process.env.DATABASE || 'dm-challenge',
+    database: process.env.DATABASE || 'dm-challenge'
+  },
+  server: {
     port: process.env.PORT || 3000
   },
   amqp: {

@@ -24,6 +24,15 @@ services:
       - "27017:27017"
     volumes:
       - 'mongodb_data:/bitnami/mongodb'
+  app:
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/src
+    command: npm start
+    ports:
+      - "3000:3000"
 networks:
   app-network:
     driver: bridge

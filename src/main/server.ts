@@ -6,6 +6,6 @@ MongoHelper.connect(`${env.mongo.url}/${env.mongo.database}`)
   .then(async () => {
     await AmqpConsumer.connect(env.amqp.url, env.amqp.exchange, env.amqp.queues.split(','))
     const app = (await import ('./config/app')).default
-    app.listen(env.mongo.port, () => console.log('Server running at http://localhost:%s', env.mongo.port))
+    app.listen(env.server.port, () => console.log('Server running at http://localhost:%s', env.server.port))
   })
   .catch(console.error)
