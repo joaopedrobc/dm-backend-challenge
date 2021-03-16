@@ -15,18 +15,13 @@ export class FindOrderController implements Controller {
     let orders: OrderModel[]
     try {
       const { params } = httpRequest
-      if (params) {
+      if (params?.orderId) {
         const orderId = params.orderId
         orders = await this.findOrder.find({ id: orderId })
-        return ok({ orders: orders })
+        return ok(orders[0])
       } else {
         orders = await this.findOrder.find({})
-        let response = ok({})
-        if (orders.length === 0) {
-          response = ok(orders[0])
-        }
-
-        return response
+        return ok({ orders: orders })
       }
     } catch (error) {
       return serverError()

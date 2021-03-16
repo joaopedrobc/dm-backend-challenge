@@ -31,10 +31,10 @@ export class DbCreateOrder implements CreateOrder {
 
     const productsInStockAvaliableForOrder = productsFromStock.filter(productInStock => productInStock.quantity >= products.filter(product => product.name === productInStock.name)[0].quantity)
     const productsForOrder: CreateFullOrderProductModel[] = productsInStockAvaliableForOrder.map(product => {
-      const productForOrder: CreateOrderProductModel = products.filter(productFromOrder => productsInStockAvaliableForOrder.filter(product => product.name === productFromOrder.name))[0]
+      const forOrder: CreateOrderProductModel = products.filter(productFromOrder => productFromOrder.name === product.name)[0]
       return {
         name: product.name,
-        quantity: productForOrder.quantity,
+        quantity: forOrder.quantity,
         price: product.price
       }
     })
@@ -42,6 +42,7 @@ export class DbCreateOrder implements CreateOrder {
     let total = 0
     productsForOrder.forEach(product => {
       total += product.price * product.quantity
+      total = Number(total.toFixed(2))
     })
 
     let order = null

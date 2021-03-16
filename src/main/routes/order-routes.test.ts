@@ -94,12 +94,13 @@ describe('Order Routes', () => {
       name: 'Kiwi',
       quantity: 2
     })
-    await orderCollection.insertOne({
+    const order = await orderCollection.insertOne({
       name: 'Kiwi',
       quantity: 3
     })
+    const url: string = order.ops[0]._id
     await request(app)
-      .get('/orders/any_id')
+      .get(`/orders/${url}`)
       .expect(200)
   })
 })
